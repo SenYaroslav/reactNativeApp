@@ -145,6 +145,7 @@ export default function RegistrationScreen() {
                       password: value,
                     }))
                   }
+                  secureTextEntry={true}
                   placeholder="Password"
                   placeholderTextColor={"#BDBDBD"}
                 />
