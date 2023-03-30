@@ -15,7 +15,7 @@ import RegistrationForm from "../../components/RegistrationForm";
 
 const screenDimensions = Dimensions.get("screen");
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [dimensions, setDimensions] = useState({
     screen: screenDimensions,
@@ -61,6 +61,7 @@ export default function RegistrationScreen() {
                 dimensions={dimensions}
                 isKeyboardShown={isKeyboardShown}
                 setIsKeyboardShown={setIsKeyboardShown}
+                navigation={navigation}
               />
             </KeyboardAvoidingView>
           </View>

@@ -15,7 +15,7 @@ import LoginForm from "../../components/LoginForm";
 
 const screenDimensions = Dimensions.get("screen");
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [dimensions, setDimensions] = useState({
     screen: screenDimensions,
@@ -51,6 +51,7 @@ export default function LoginScreen() {
                 dimensions={dimensions}
                 isKeyboardShown={isKeyboardShown}
                 setIsKeyboardShown={setIsKeyboardShown}
+                navigation={navigation}
               />
             </KeyboardAvoidingView>
           </View>

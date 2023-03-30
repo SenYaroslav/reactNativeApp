@@ -18,6 +18,7 @@ export default function RegistrationForm({
   dimensions,
   isKeyboardShown,
   setIsKeyboardShown,
+  navigation,
 }) {
   const [userData, setUserData] = useState(initialState);
   const [isLoginInputActive, setIsLoginInputActive] = useState(false);
@@ -119,7 +120,10 @@ export default function RegistrationForm({
             : Math.floor(dimensions.screen.height / 10.5),
         }}
       >
-        <Text style={styles.text}>Already have an account? Login</Text>
+        <Text style={styles.text}>
+          Already have an account?
+          <Text onPress={() => navigation.navigate("Login")}> Login</Text>
+        </Text>
       </View>
     </View>
   );

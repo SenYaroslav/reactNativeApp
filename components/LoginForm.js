@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  Button,
 } from "react-native";
 
 const initialState = {
@@ -17,6 +18,7 @@ export default function LoginForm({
   dimensions,
   isKeyboardShown,
   setIsKeyboardShown,
+  navigation,
 }) {
   const [userData, setUserData] = useState(initialState);
   const [isEmailInputActive, setIsEmailInputActive] = useState(false);
@@ -96,7 +98,12 @@ export default function LoginForm({
             : Math.floor(dimensions.screen.height / 6),
         }}
       >
-        <Text style={styles.text}>Don't have an account? Register</Text>
+        <Text style={styles.text}>
+          Don't have an account?{" "}
+          <Text onPress={() => navigation.navigate("Registration")}>
+             Register
+          </Text>
+        </Text>
       </View>
     </View>
   );
