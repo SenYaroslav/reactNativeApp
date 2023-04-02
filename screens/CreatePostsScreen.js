@@ -6,20 +6,15 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Text,
   Keyboard,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 
 import SubmitButton from "../components/SubmitButton";
-
-const initialState = {
-  photo: "",
-  location: null,
-  title: "",
-  locationFromInput: "",
-};
 
 export default function CreatePostsScreen({ navigation }) {
   const [camera, setCamera] = useState(null);
@@ -50,11 +45,17 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const onFormSubmit = () => {
-    navigation.navigate("Posts", { photo, location });
+    navigation.navigate("Posts", { photo, location, title, locationFromInput });
+    resetForm();
     // setIsKeyboardShown(false);
     // Keyboard.dismiss();
+  };
 
-    console.log("location in submit _____>>>> ", location);
+  const resetForm = () => {
+    setPhoto("");
+    setLocation(null);
+    setTitle("");
+    setLocationFromInput("");
   };
 
   return (
@@ -71,18 +72,21 @@ export default function CreatePostsScreen({ navigation }) {
           )}
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={takePhoto}>
-              <MaterialIcons name="camera-alt" size={24} color="white" />
+              <MaterialIcons
+                name="camera-alt"
+                size={24}
+                color={photo ? "white" : "black"}
+              />
             </TouchableOpacity>
           </View>
         </Camera>
       </View>
+      <Text style={styles.text}>{photo ? "Edit photo" : "Load photo"}</Text>
       <View style={styles.form}>
         <TextInput
           style={{
             ...styles.input,
             marginBottom: 16,
-            backgroundColor: isTitleInputActive ? "#FFFFFF" : "#F6F6F6",
-            borderColor: isTitleInputActive ? "#FF6C00" : "#E8E8E8",
           }}
           value={title}
           onFocus={() => {
@@ -98,11 +102,7 @@ export default function CreatePostsScreen({ navigation }) {
           placeholderTextColor={"#BDBDBD"}
         />
         <TextInput
-          style={{
-            ...styles.input,
-            backgroundColor: isLocationInputActive ? "#FFFFFF" : "#F6F6F6",
-            borderColor: isLocationInputActive ? "#FF6C00" : "#E8E8E8",
-          }}
+          style={styles.input}
           value={locationFromInput}
           onFocus={() => {
             setIsKeyboardShown(true);
@@ -118,7 +118,19 @@ export default function CreatePostsScreen({ navigation }) {
         />
       </View>
       <StatusBar style="auto" />
-      <SubmitButton title="Post" onFormSubmit={onFormSubmit} />
+      <View style={styles.tabBarWrapper}></View>
+      {photo && title && locationFromInput ? (
+        <SubmitButton title="Post" onFormSubmit={onFormSubmit} />
+      ) : (
+        <SubmitButton title="Post" disabled="true" />
+      )}
+      <TouchableOpacity
+        style={styles.trashButton}
+        activeOpacity={0.7}
+        onPress={resetForm}
+      >
+        <Feather name="trash-2" size={24} color="#c7c7c7" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -154,17 +166,33 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  text: {
+    marginTop: 8,
+    paddingLeft: 4,
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    color: "#BDBDBD",
+  },
   form: {
     marginVertical: 32,
   },
   input: {
     height: 50,
-    paddingLeft: 16,
-    backgroundColor: "#5f5f",
+    paddingLeft: 4,
     borderBottomWidth: 1,
-    // borderRadius: 8,
-    borderColor: "#E8E8E8",
+    borderBottomColor: "#E8E8E8",
     fontFamily: "Roboto-Regular",
     fontSize: 16,
+  },
+  trashButton: {
+    marginBottom: 32,
+    marginTop: "auto",
+    height: 40,
+    width: 70,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
   },
 });
