@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
+import SubmitButton from "./SubmitButton";
 
 const initialState = {
   login: "",
@@ -105,13 +106,7 @@ export default function RegistrationForm({
         placeholder="Password"
         placeholderTextColor={"#BDBDBD"}
       />
-      <TouchableOpacity
-        onPress={onFormSubmit}
-        activeOpacity={0.7}
-        style={styles.btn}
-      >
-        <Text style={styles.btn_text}>Sign up</Text>
-      </TouchableOpacity>
+      <SubmitButton title="Sign up" onFormSubmit={onFormSubmit} />
       <View
         style={{
           ...styles.text_wrapper,
@@ -152,18 +147,6 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     fontFamily: "Roboto-Regular",
     fontSize: 16,
-  },
-  btn: {
-    height: 51,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-    backgroundColor: "#FF6C00",
-  },
-  btn_text: {
-    fontFamily: "Roboto-Regular",
-    fontSize: 16,
-    color: "#FFFFFF",
   },
   text_wrapper: {
     alignItems: "center",
