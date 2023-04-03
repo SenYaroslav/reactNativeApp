@@ -45,7 +45,7 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const onFormSubmit = () => {
-    navigation.navigate("Posts", { photo, location, title, locationFromInput });
+    navigation.navigate("Post", { photo, location, title, locationFromInput });
     resetForm();
     // setIsKeyboardShown(false);
     // Keyboard.dismiss();

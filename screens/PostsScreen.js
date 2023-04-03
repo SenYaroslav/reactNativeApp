@@ -16,10 +16,9 @@ export default function PostsScreen({ navigation, route }) {
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [...prevState, route.params]);
+      console.log('posts in PostsScreen ====> ', posts)
     }
   }, [route.params]);
-
-  console.log("posts > > > > ", posts);
 
   return (
     <View style={styles.container}>
@@ -33,21 +32,21 @@ export default function PostsScreen({ navigation, route }) {
       <FlatList
         data={posts}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View>
             <Image style={styles.image} source={{ uri: item.photo }} />
             <Text style={styles.title}>{item.title}</Text>
             <View style={styles.infoWrapper}>
               <TouchableOpacity
                 style={styles.commentsWrapper}
-                onPress={() => navigation.navigate("CommentsScreen")}
+                onPress={() => navigation.navigate("CommentsScreen", {posts, index })}
               >
                 <Ionicons name="chatbubble-outline" size={24} color="#BDBDBD" />
                 <Text style={styles.numberOfComments}>0</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.locationWrapper}
-                onPress={() => navigation.navigate("MapScreen")}
+                onPress={() => navigation.navigate("MapScreen", {posts})}
               >
                 <Ionicons name="location-outline" size={24} color="#BDBDBD" />
                 <Text style={styles.locationText}>

@@ -1,10 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
-export default function CommentsScreen() {
+export default function CommentsScreen({ route }) {
+  const { index } = route.params;
+  const { photo } = route.params.posts[index];
+
   return (
     <View style={styles.container}>
-      <Text>This is "CommentsScreen" component!</Text>
+      <Image style={styles.image} source={{ uri: photo }} />
+      <Text>There are no comments yet</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -14,7 +18,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 32,
+  },
+  image: {
+    width: "100%",
+    height: 240,
+    marginBottom: 8,
+    borderRadius: 8,
   },
 });

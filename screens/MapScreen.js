@@ -1,10 +1,23 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
-export default function MapScreen() {
+export default function MapScreen({ route }) {
+  const { latitude, longitude } = route.params.posts[0].location.coords;
+
   return (
     <View style={styles.container}>
-      <Text>This is "MapScreen" component!</Text>
+      <MapView
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude,
+          longitude,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.005,
+        }}
+      >
+        <Marker coordinate={{ latitude, longitude }} title="travel photo" />
+      </MapView>
       <StatusBar style="auto" />
     </View>
   );
@@ -13,8 +26,5 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
