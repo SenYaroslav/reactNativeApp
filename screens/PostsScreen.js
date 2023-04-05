@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { selectUser } from "../redux/auth/authSelectors";
+import { useSelector } from "react-redux";
 
 export default function PostsScreen({ navigation, route }) {
   const [posts, setPosts] = useState([]);
-
+  const {name, email, userId} = useSelector(selectUser)
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [...prevState, route.params]);
@@ -25,8 +27,8 @@ export default function PostsScreen({ navigation, route }) {
       <View style={styles.userInfo}>
         <View style={styles.avatarPlaceholder}></View>
         <View>
-          <Text style={styles.userName}>Yaroslav Seniuk</Text>
-          <Text style={styles.userEmail}>yaroslavseniuk@example.com</Text>
+          <Text style={styles.userName}>{name} </Text>
+          <Text style={styles.userEmail}>{email}</Text>
         </View>
       </View>
       <FlatList

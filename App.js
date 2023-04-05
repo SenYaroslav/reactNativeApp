@@ -1,17 +1,15 @@
-import { useCallback, useState } from "react";
-import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import useRoute from "./router";
+import { useCallback } from "react";
+import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import { auth } from "./firebase/config";
+import { View } from "react-native";
+
+import Main from "./components/Main";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [user, setUser] = useState(null)
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-400-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-500-Medium.ttf"),
@@ -27,15 +25,10 @@ export default function App() {
     return null;
   }
 
-  auth.onAuthStateChanged((user) => setUser(user));
-  // console.log('user in App.js > > > > ', user)
-
-  const routing = useRoute(user);
-
   return (
     <Provider store={store}>
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <NavigationContainer>{routing}</NavigationContainer>
+        <Main />
       </View>
     </Provider>
   );
