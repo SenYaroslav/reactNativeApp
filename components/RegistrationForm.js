@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { signUpUser } from "../redux/auth/authOperations";
+
 import SubmitButton from "./SubmitButton";
 
 const initialState = {
@@ -26,8 +29,11 @@ export default function RegistrationForm({
   const [isEmailInputActive, setIsEmailInputActive] = useState(false);
   const [isPasswordInputActive, setIsPasswordInputActive] = useState(false);
 
+  const dispatch = useDispatch();
+
   const onFormSubmit = () => {
-    console.log(userData);
+    console.log('userData on onRegistrationFormSubmit', userData);
+    dispatch(signUpUser(userData));
     Keyboard.dismiss();
     setUserData(initialState);
   };

@@ -16,51 +16,51 @@ const initialHeaderTitleStyle = {
 
 export default function useRoute(isAuth) {
   return (
-    <Stack.Navigator>
-      {isAuth ? (
-        <>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MapScreen"
-            component={MapScreen}
-            options={({ navigation }) => ({
-              headerTitle: "Map",
-              headerTitleStyle: initialHeaderTitleStyle,
-              headerStyle: { borderBottomWidth: 1 },
-              headerTitleAlign: "center",
-              headerBackVisible: false,
-            })}
-          />
-          <Stack.Screen
-            name="CommentsScreen"
-            component={CommentsScreen}
-            options={({ navigation }) => ({
-              headerTitle: "Comments",
-              headerTitleStyle: initialHeaderTitleStyle,
-              headerStyle: { borderBottomWidth: 1 },
-              headerTitleAlign: "center",
-              headerBackVisible: false,
-            })}
-          />
-        </>
-      ) : (
-        <>
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name="Login"
-            component={LoginScreen}
-          />
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name="Registration"
-            component={RegistrationScreen}
-          />
-        </>
-      )}
-    </Stack.Navigator>
+      <Stack.Navigator>
+        {isAuth ? (
+          <>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={({ navigation }) => ({
+                headerTitle: "Map",
+                headerTitleStyle: initialHeaderTitleStyle,
+                headerStyle: { borderBottomWidth: 1 },
+                headerTitleAlign: "center",
+                headerBackVisible: false,
+              })}
+            />
+            <Stack.Screen
+              name="CommentsScreen"
+              component={CommentsScreen}
+              options={({ navigation }) => ({
+                headerTitle: "Comments",
+                headerTitleStyle: initialHeaderTitleStyle,
+                headerStyle: { borderBottomWidth: 1 },
+                headerTitleAlign: "center",
+                headerBackVisible: false,
+              })}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Login"
+              component={LoginScreen}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Registration"
+              component={RegistrationScreen}
+            />
+          </>
+        )}
+      </Stack.Navigator>
   );
 }
