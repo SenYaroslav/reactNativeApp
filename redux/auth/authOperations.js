@@ -43,7 +43,7 @@ export const refresh = createAsyncThunk("auth/update", async () => {
   const auth = await getAuth();
   await onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log("user in refresh function", user);
+      // console.log("user in refresh function", user);
       const uid = user.uid;
       const displayName = user.displayName;
       const email = user.email;

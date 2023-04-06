@@ -29,7 +29,6 @@ export default function LoginForm({
   const dispatch = useDispatch();
 
   const onFormSubmit = () => {
-    console.log('userData on onLoginFormSubmit', userData);
     dispatch(signInUser(userData));
     Keyboard.dismiss();
     setUserData(initialState);

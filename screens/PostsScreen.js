@@ -11,16 +11,22 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { selectUser } from "../redux/auth/authSelectors";
 import { useSelector } from "react-redux";
+import { collection, onSnapshot } from "@firebase/firestore";
+import { db } from "../firebase/config";
 
 export default function PostsScreen({ navigation, route }) {
   const [posts, setPosts] = useState([]);
-  const {name, email, userId} = useSelector(selectUser)
+  const { name, email, userId } = useSelector(selectUser);
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-      console.log('posts in PostsScreen ====> ', posts)
-    }
-  }, [route.params]);
+    getAllPost();
+  }, []);
+
+  const getAllPost = async () => {
+    await onSnapshot(collection(db, "posts"), (snapshots) => {
+      setPosts(snapshots.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -41,14 +47,16 @@ export default function PostsScreen({ navigation, route }) {
             <View style={styles.infoWrapper}>
               <TouchableOpacity
                 style={styles.commentsWrapper}
-                onPress={() => navigation.navigate("CommentsScreen", {posts, index })}
+                onPress={() =>
+                  navigation.navigate("CommentsScreen", { posts, index })
+                }
               >
                 <Ionicons name="chatbubble-outline" size={24} color="#BDBDBD" />
                 <Text style={styles.numberOfComments}>0</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.locationWrapper}
-                onPress={() => navigation.navigate("MapScreen", {posts})}
+                onPress={() => navigation.navigate("MapScreen", { posts })}
               >
                 <Ionicons name="location-outline" size={24} color="#BDBDBD" />
                 <Text style={styles.locationText}>
