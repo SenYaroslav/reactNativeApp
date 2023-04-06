@@ -8,13 +8,14 @@ import {
   Keyboard,
   Button,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { signInUser } from "../redux/auth/authOperations";
 import SubmitButton from "./SubmitButton";
 
 const initialState = {
   email: "",
   password: "",
 };
-
 export default function LoginForm({
   dimensions,
   isKeyboardShown,
@@ -25,8 +26,10 @@ export default function LoginForm({
   const [isEmailInputActive, setIsEmailInputActive] = useState(false);
   const [isPasswordInputActive, setIsPasswordInputActive] = useState(false);
 
+  const dispatch = useDispatch();
+
   const onFormSubmit = () => {
-    console.log(userData);
+    dispatch(signInUser(userData));
     Keyboard.dismiss();
     setUserData(initialState);
   };

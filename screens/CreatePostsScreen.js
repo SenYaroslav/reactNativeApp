@@ -13,6 +13,17 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
+import {
+  getStorage,
+  uploadBytesResumable,
+  uploadBytes,
+  ref,
+  getDownloadURL,
+} from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { db, storage } from "../firebase/config";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../redux/auth/authSelectors";
 
 import SubmitButton from "../components/SubmitButton";
 
@@ -25,6 +36,8 @@ export default function CreatePostsScreen({ navigation }) {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [isTitleInputActive, setIsTitleInputActive] = useState(false);
   const [isLocationInputActive, setIsLocationInputActive] = useState(false);
+  const { name, email, userId } = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -44,11 +57,38 @@ export default function CreatePostsScreen({ navigation }) {
     setLocation(location);
   };
 
-  const onFormSubmit = () => {
-    navigation.navigate("Post", { photo, location, title, locationFromInput });
-    resetForm();
+  const onFormSubmit = async () => {
+    try {
+      navigation.navigate("Post", {
+        photo,
+        location,
+        title,
+        locationFromInput,
+      });
+      await uploadPostToServer();
+      resetForm();
+    } catch (error) {
+      alert(error.code);
+      console.log("error.message >>> ", error.message);
+    }
     // setIsKeyboardShown(false);
     // Keyboard.dismiss();
+  };
+
+  const uploadPostToServer = async () => {
+    const {latitude, longitude} = location.coords
+    const photo = await uploadPhotoToServer();
+    const createPost = await addDoc(collection(db, "posts"), {photo, location: {latitude, longitude}, userId, author: name, title, locationFromInput });
+  };
+
+  const uploadPhotoToServer = async () => {
+    const res = await fetch(photo);
+    const file = await res.blob();
+    const uniquePostId = Date.now().toString();
+    const data = ref(storage, `postImages/${uniquePostId}`);
+    await uploadBytes(data, file);
+    const downloadPhoto = await getDownloadURL(data);
+    return downloadPhoto;
   };
 
   const resetForm = () => {

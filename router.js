@@ -1,4 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "./redux/auth/authSelectors";
 
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
@@ -15,6 +18,9 @@ const initialHeaderTitleStyle = {
 };
 
 export default function useRoute(isAuth) {
+  // const { userId } = useSelector(selectUser);
+  // console.log("userId in router.js >>>>>>", userId);
+
   return (
     <Stack.Navigator>
       {isAuth ? (
