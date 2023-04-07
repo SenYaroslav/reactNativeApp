@@ -17,6 +17,7 @@ import { db } from "../firebase/config";
 export default function PostsScreen({ navigation, route }) {
   const [posts, setPosts] = useState([]);
   const { name, email, userId } = useSelector(selectUser);
+  console.log('posts >>>>>>>>>>>>>>>>', posts)
 
   useEffect(() => {
     getAllPost();
@@ -48,7 +49,10 @@ export default function PostsScreen({ navigation, route }) {
               <TouchableOpacity
                 style={styles.commentsWrapper}
                 onPress={() =>
-                  navigation.navigate("CommentsScreen", { posts, index })
+                  navigation.navigate("CommentsScreen", {
+                    postId: item.id,
+                    photo: item.photo,
+                  })
                 }
               >
                 <Ionicons name="chatbubble-outline" size={24} color="#BDBDBD" />
