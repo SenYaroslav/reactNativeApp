@@ -8,6 +8,7 @@ import {
   TextInput,
   Text,
   Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -59,26 +60,33 @@ export default function CreatePostsScreen({ navigation }) {
 
   const onFormSubmit = async () => {
     try {
-      navigation.navigate("Post", {
-        photo,
-        location,
-        title,
-        locationFromInput,
-      });
+      navigation.navigate("Post"
+      // , {
+      //   photo,
+      //   location,
+      //   title,
+      //   locationFromInput,
+      // }
+      );
       await uploadPostToServer();
       resetForm();
     } catch (error) {
       alert(error.code);
       console.log("error.message >>> ", error.message);
     }
-    // setIsKeyboardShown(false);
-    // Keyboard.dismiss();
   };
 
   const uploadPostToServer = async () => {
-    const {latitude, longitude} = location.coords
+    const { latitude, longitude } = location.coords;
     const photo = await uploadPhotoToServer();
-    const createPost = await addDoc(collection(db, "posts"), {photo, location: {latitude, longitude}, userId, author: name, title, locationFromInput });
+    const createPost = await addDoc(collection(db, "posts"), {
+      photo,
+      location: { latitude, longitude },
+      userId,
+      author: name,
+      title,
+      locationFromInput,
+    });
   };
 
   const uploadPhotoToServer = async () => {
@@ -98,80 +106,87 @@ export default function CreatePostsScreen({ navigation }) {
     setLocationFromInput("");
   };
 
+  const keyboardHide = () => {
+    Keyboard.dismiss();
+    setIsKeyboardShown(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.cameraWrapper}>
-        <Camera style={styles.cameraScreen} ref={setCamera}>
-          {photo && (
-            <View style={styles.takePhotoContainer}>
-              <Image
-                source={{ uri: photo }}
-                style={{ height: "100%", width: "100%" }}
-              />
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={styles.container}>
+        <View style={styles.cameraWrapper}>
+          <Camera style={styles.cameraScreen} ref={setCamera}>
+            {photo && (
+              <View style={styles.takePhotoContainer}>
+                <Image
+                  source={{ uri: photo }}
+                  style={{ height: "100%", width: "100%" }}
+                />
+              </View>
+            )}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={takePhoto}>
+                <MaterialIcons
+                  name="camera-alt"
+                  size={24}
+                  color={photo ? "white" : "black"}
+                />
+              </TouchableOpacity>
             </View>
-          )}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={takePhoto}>
-              <MaterialIcons
-                name="camera-alt"
-                size={24}
-                color={photo ? "white" : "black"}
-              />
-            </TouchableOpacity>
-          </View>
-        </Camera>
+          </Camera>
+        </View>
+        <Text style={styles.text}>{photo ? "Edit photo" : "Load photo"}</Text>
+        <View style={styles.form}>
+          <TextInput
+            style={{
+              ...styles.input,
+              marginBottom: 16,
+            }}
+            value={title}
+            onFocus={() => {
+              setIsKeyboardShown(true);
+              setIsTitleInputActive(true);
+            }}
+            onBlur={() => {
+              setIsKeyboardShown(false);
+              setIsTitleInputActive(false);
+            }}
+            onChangeText={(value) => setTitle(value)}
+            placeholder="Title"
+            placeholderTextColor={"#BDBDBD"}
+          />
+          <TextInput
+            style={styles.input}
+            value={locationFromInput}
+            onFocus={() => {
+              setIsKeyboardShown(true);
+              setIsLocationInputActive(true);
+            }}
+            onBlur={() => {
+              setIsKeyboardShown(false);
+              setIsLocationInputActive(false);
+            }}
+            onChangeText={(value) => setLocationFromInput(value)}
+            placeholder="Location"
+            placeholderTextColor={"#BDBDBD"}
+          />
+        </View>
+        <StatusBar style="auto" />
+        <View style={styles.tabBarWrapper}></View>
+        {photo && title && locationFromInput ? (
+          <SubmitButton title="Post" onFormSubmit={onFormSubmit} />
+        ) : (
+          <SubmitButton title="Post" disabled="true" />
+        )}
+        <TouchableOpacity
+          style={styles.trashButton}
+          activeOpacity={0.7}
+          onPress={resetForm}
+        >
+          <Feather name="trash-2" size={24} color="#c7c7c7" />
+        </TouchableOpacity>
       </View>
-      <Text style={styles.text}>{photo ? "Edit photo" : "Load photo"}</Text>
-      <View style={styles.form}>
-        <TextInput
-          style={{
-            ...styles.input,
-            marginBottom: 16,
-          }}
-          value={title}
-          onFocus={() => {
-            setIsKeyboardShown(true);
-            setIsTitleInputActive(true);
-          }}
-          onBlur={() => {
-            setIsKeyboardShown(false);
-            setIsTitleInputActive(false);
-          }}
-          onChangeText={(value) => setTitle(value)}
-          placeholder="Title"
-          placeholderTextColor={"#BDBDBD"}
-        />
-        <TextInput
-          style={styles.input}
-          value={locationFromInput}
-          onFocus={() => {
-            setIsKeyboardShown(true);
-            setIsLocationInputActive(true);
-          }}
-          onBlur={() => {
-            setIsKeyboardShown(false);
-            setIsLocationInputActive(false);
-          }}
-          onChangeText={(value) => setLocationFromInput(value)}
-          placeholder="Location"
-          placeholderTextColor={"#BDBDBD"}
-        />
-      </View>
-      <StatusBar style="auto" />
-      <View style={styles.tabBarWrapper}></View>
-      {photo && title && locationFromInput ? (
-        <SubmitButton title="Post" onFormSubmit={onFormSubmit} />
-      ) : (
-        <SubmitButton title="Post" disabled="true" />
-      )}
-      <TouchableOpacity
-        style={styles.trashButton}
-        activeOpacity={0.7}
-        onPress={resetForm}
-      >
-        <Feather name="trash-2" size={24} color="#c7c7c7" />
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
